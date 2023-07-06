@@ -1,0 +1,707 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../05-optimization/">
+      
+      
+        <link rel="next" href="../07-parallel/">
+      
+      <link rel="icon" href="../image/logo.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
+    
+    
+      
+        <title>虚拟化硬件视图：内存管理 - 计算机系统导论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans SC";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="计算机系统导论" class="md-header__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机系统导论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              虚拟化硬件视图：内存管理
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="计算机系统导论" class="md-nav__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    计算机系统导论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          程序员视角的计算机系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          程序员视角的计算机系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-simplest/" class="md-nav__link">
+        从无到有的历程：最简单的计算机
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ilp/" class="md-nav__link">
+        乱序执行的魔法：数据依赖与指令级并行
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-optimization/" class="md-nav__link">
+        局部与整体协调：优化程序性能
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          虚拟化硬件视图：内存管理
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        虚拟化硬件视图：内存管理
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    内存管理的硬件基础
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    缺页错误
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    多级页表
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risc-v" class="md-nav__link">
+    RISC-V中的页式内存管理
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    一次内存(磁盘)访问
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-parallel/" class="md-nav__link">
+        聚沙成塔的道路：并行计算机系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-dsa/" class="md-nav__link">
+        专用领域加速器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          yhcore：一个RISC-V操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          yhcore：一个RISC-V操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06.md" class="md-nav__link">
+        裸机上的程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    内存管理的硬件基础
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    缺页错误
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    多级页表
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risc-v" class="md-nav__link">
+    RISC-V中的页式内存管理
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    一次内存(磁盘)访问
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">虚拟化硬件视图：内存管理</h1>
+<p>现代计算机系统的一个重要特征是对多个进程的支持。自然而然地，为了支持多个进程在CPU上并发地运行，从程序员的角度来看，程序员当然不希望某一个进程在运行途中，被另一个进程改写了自身的数据。所以，内存管理成为了必须所探讨的话题。现代计算机都拥有内存管理机制，历史上有一些体系结构支持段式内存管理，而现在大多数的体系结构都是不支持的，它们往往支持的是另一种管理方式——页式管理。</p>
+<p>在这里，我们研究的是计算机系统上运行的一般程序。也就是说，如果我们还希望考察计算机系统上运行的0号进程——操作系统的话，我们讲述的内容就稍微有一些不同了。两者的不同之处我们会在之后做简单的提要。</p>
+<h3 id="_2">内存管理的硬件基础</h3>
+<p>尽管一条指令的长度具有64位宽，但是，我们的存储器往往都没有这么大。也就是说，尽管理论上我们可以访问一个超级巨大的存储器（16EB，对比天河二号的总内存为1.4PB）中的全部内容，但是存储器的物理容量不会允许我们这么做。</p>
+<p>这就要引入计算机系统的一个经典话题：虚拟化。对于计算机系统上运行的程序，我们如何做一定程度的抽象，使得从它的视角来看，自己好像独占了整个CPU、拥有内存地址？事实上前面的内容我们已经讨论到过前一个问题，即hart可以通过时钟中断强制引发进程的切换，如果两次切换的间隔是很小的，那么在一段时间上来看我们的两个进程就并发地在处理器上运行。对于后面一个问题，我们就要引入虚拟内存地址。</p>
+<p>大多数处理器实际上使用的是页式内存管理机制。也就是说，将我们的物理内存按照一定的大小进行组织；简单而形象地说，我们将物理内存抽象成为一本书，那么物理内存就被划分为很多的连续片段，每个连续片段都叫页面。</p>
+<p><img alt="" src="../image/image_r_UgXBU8NI.png" /></p>
+<p>在现代的计算机上，处理器核发出的访存指令的地址都是虚拟地址。它向内存管理单元（Memory Management Unit, MMU）发出虚拟地址，MMU会将真正的物理地址发往存储器。同样地，虚拟地址也对应着虚拟页面，它需要经过转换才能得到物理页面的地址。</p>
+<p><img alt="" src="../image/image_ieYOP-dhhR.png" /></p>
+<p>基本的原理是，对于每一个地址，我们将其划分为两部分，用高位部分作为索引，到快表（Translation Lookaside Buffer, TLB）中寻找对应的物理页号，TLB中的数据就被称为页表项。由于物理页大小和虚拟页大小通常是一致的，因此只需要将得到的物理页号和虚拟页偏移量拼接，就能得到真实的物理地址。从偏移量这个角度也容易看到，一个页面的大小就是由偏移量的位数决定的：例如，若页面偏移量为12位，每一位对应一个字节，那么一个页面的大小就是4KB。</p>
+<p>在某一片特定的内存区域里，存放着虚拟页号和物理页号的对应关系表。TLB实质上是对这一段内存区域的缓存，和Cache一样，只是只缓存虚拟页号和物理页号的对应关系。因此，和访问内存一样，通过虚拟页号的索引去查询物理页表时，实际上也是一次内存访问，访问的物理地址就是页表基址寄存器的值加上虚拟页号（虚拟页号作为偏移）。</p>
+<h3 id="_3">缺页错误</h3>
+<p>我们知道，内存中的数据事实上是从磁盘中得来的。在这种意义下，内存实际上被看作了磁盘和CPU之间的缓存。好处就是，我们不必一次性将硬盘中的数据都搬到内存中（事实上也做不到），而是在程序运行的过程中，按照需要进行数据的搬运。</p>
+<p>那么，就容易出现这样一种情况，程序所需要的数据还停留在磁盘中，这样当我们用虚拟地址在页目录项中找不到对应的物理页面时，就会触发缺页错误（page fault）。处理器接收到这一异常以后，处理器就会自动进入到异常处理流程，将对应的数据从磁盘上搬运到内存中。</p>
+<h3 id="_4">多级页表</h3>
+<p>回到最开始的问题，假如我们希望每一个进程都拥有自己的地址空间，那么我们就需要为每一个进程都准备一个页表。假定页面大小仍为4KB，那么在64位寻址空间的条件下我们始终需要为每一个进程准备<span class="arithmatex">\(2^{52}\)</span>个页表项，这是一个巨大的性能开支，我们当然不希望为了达到虚拟化的目的而穷尽我们的全部性能。因此，多级页表被引入进来。</p>
+<p><img alt="" src="../image/image__0yM1goNjG.png" /></p>
+<p>其主要思想是，将虚拟地址进行多段划分，每一个低级页表项都指向下一级页表。这样，我们的一级页表就可以很小，并且我们不必一开始就为每一个一级页表项都分配一个二级页表项，只有我们需要使用到对应的虚拟地址的时候，我们再通过缺页错误异常处理来添加即可。由于TLB访问起来很快，因此多级页表通常情况下并不比一级页表慢多少。</p>
+<h3 id="risc-v">RISC-V中的页式内存管理</h3>
+<p>默认情况下，RISC-V处理器中的MMU是未启动的。和我们曾经实现过的RISC-V的五级流水线核一样，不论CPU处于哪一个特权级，访存的地址都会被认为是物理地址来直接访问物理内存。通过修改S特权级下的satp这个CSR，可以启动分页模式，此后S和U模式下CPU发出的地址都会被认为是虚拟地址。和我们刚才讨论的略有不同，在高地址处，RISC-V规定的是高层级页表，并且高层级页表是指向低层级页表的索引。</p>
+<h3 id="_5">一次内存(磁盘)访问</h3>
+<p>现在我们从操作系统上运行的一个进程的视角，观察它的一次内存访问的过程是怎样的。</p>
+<p><img alt="" src="../image/image_uHy_ZKd0O0.png" /></p>
+<p>每一个进程都拥有自己的虚拟地址空间。例如，在64位机器上，进程会认为自己独占了整个<span class="arithmatex">\([0,2^{64}-1]\)</span>的内存空间。当进程需要访问内存时，CPU会将要访问的地址发给MMU。MMU在L1中匹配一级页地址，然后依次逐级找到物理页地址。</p>
+<p>找到物理页地址后，再依照虚拟页偏移，得到物理地址。此时，MMU将物理地址提供给各级缓存，如果在缓存中命中，则直接将数据传递给CPU，否则则到更低的存储层次中寻找。</p>
+<p>稍微有一些不同的是，页面命中完全是由硬件来完成的，而如果某一个页被标记为未缓存（意味着还没有提供一块内存空间缓存进程需要的数据），那么CPU会发生一个缺页异常。处理缺页必须要求硬件核操作系统共同完成。缺页异常的处理方法是从磁盘中读入对应所需要的内容，然后将其写入到内存的页面中。从这个意义上说，内存实际上是磁盘和CPU之间的一个缓存。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../05-optimization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 局部与整体协调：优化程序性能" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                局部与整体协调：优化程序性能
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../07-parallel/" class="md-footer__link md-footer__link--next" aria-label="Next: 聚沙成塔的道路：并行计算机系统" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                聚沙成塔的道路：并行计算机系统
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      沙河小分队 蜀ICP备2021028983号-2
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+
+  
+
+<h4>Cookie 使用说明</h4>
+<p>我们使用 Cookie 来识别您的重复访问和偏好，从而衡量我们文档的有效性以及用户是否找到他们正在搜索的内容。您对 Cookie 的接受将帮助我们改进文档。</p>
+<input class="md-toggle" type="checkbox" id="__settings" checked>
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

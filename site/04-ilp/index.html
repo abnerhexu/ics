@@ -1,0 +1,1029 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../01-simplest/">
+      
+      
+        <link rel="next" href="../05-optimization/">
+      
+      <link rel="icon" href="../image/logo.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
+    
+    
+      
+        <title>乱序执行的魔法：数据依赖与指令级并行 - 计算机系统导论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans SC";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="计算机系统导论" class="md-header__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机系统导论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              乱序执行的魔法：数据依赖与指令级并行
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="计算机系统导论" class="md-nav__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    计算机系统导论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          程序员视角的计算机系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          程序员视角的计算机系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-simplest/" class="md-nav__link">
+        从无到有的历程：最简单的计算机
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          乱序执行的魔法：数据依赖与指令级并行
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        乱序执行的魔法：数据依赖与指令级并行
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    记分牌算法
+  </a>
+  
+    <nav class="md-nav" aria-label="记分牌算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    记分牌的结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    记分牌的优缺点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tomasulo" class="md-nav__link">
+    Tomasulo算法
+  </a>
+  
+    <nav class="md-nav" aria-label="Tomasulo算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    数据依赖
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    寄存器重命名
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    硬件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    算法优点
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    算法缺点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rob" class="md-nav__link">
+    重排序缓存ROB
+  </a>
+  
+    <nav class="md-nav" aria-label="重排序缓存ROB">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tomasulo_1" class="md-nav__link">
+    改造后的Tomasulo硬件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    要点概述
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    对分支预测的支持
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    寄存器重命名
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    分支预测
+  </a>
+  
+    <nav class="md-nav" aria-label="分支预测">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    关联预测器
+  </a>
+  
+    <nav class="md-nav" aria-label="关联预测器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gshare" class="md-nav__link">
+    Gshare预测器
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    竞争预测器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    带标签的混合预测器
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-optimization/" class="md-nav__link">
+        局部与整体协调：优化程序性能
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-memory/" class="md-nav__link">
+        虚拟化硬件视图：内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-parallel/" class="md-nav__link">
+        聚沙成塔的道路：并行计算机系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-dsa/" class="md-nav__link">
+        专用领域加速器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          yhcore：一个RISC-V操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          yhcore：一个RISC-V操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06.md" class="md-nav__link">
+        裸机上的程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    记分牌算法
+  </a>
+  
+    <nav class="md-nav" aria-label="记分牌算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    记分牌的结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    记分牌的优缺点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tomasulo" class="md-nav__link">
+    Tomasulo算法
+  </a>
+  
+    <nav class="md-nav" aria-label="Tomasulo算法">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    数据依赖
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    寄存器重命名
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    硬件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    算法优点
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    算法缺点
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rob" class="md-nav__link">
+    重排序缓存ROB
+  </a>
+  
+    <nav class="md-nav" aria-label="重排序缓存ROB">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tomasulo_1" class="md-nav__link">
+    改造后的Tomasulo硬件结构
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    要点概述
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    对分支预测的支持
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    寄存器重命名
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    分支预测
+  </a>
+  
+    <nav class="md-nav" aria-label="分支预测">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    关联预测器
+  </a>
+  
+    <nav class="md-nav" aria-label="关联预测器">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gshare" class="md-nav__link">
+    Gshare预测器
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    竞争预测器
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_16" class="md-nav__link">
+    带标签的混合预测器
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">乱序执行的魔法：数据依赖与指令级并行</h1>
+<p>现在的市场上，人们几乎很难找到面向消费者级别的，单周期或多周期的处理器了。在一些微控制器中，也用上了像Cortex-M0这样的三级流水线的处理器。一般而言，基本流水线能让我们获得的每周期指令数（instructions per cycle, IPC）不会比1大。这里我们主要考虑的因素是流水线中存在的数据依赖关系可能造成流水线的阻塞。</p>
+<p>要想解决这个问题，历史上主要有两条思路，一方面是我们可以增加流水线的数量，例如，我们使两条流水线共同工作；另一方面，我们试图继续挖掘方法，减小指令之间的相关性带来的影响。</p>
+<h3 id="_2">记分牌算法</h3>
+<p>基于我们朴素的认识，顺序执行的流水线很容易发生阻塞的问题。例如，load指令可能在访存阶段会遇到缓存不命中（cache miss），那么，流水线必须停下来，等待若干周期，等到正确获取到内存中的数据后再继续执行。而由于处理器和存储器发展非常不平衡，这一阶段可能会浪费掉几十甚至几百个时钟周期。假如load指令之后的若干指令都与load指令不存在数据依赖关系，理所应当地就可以“绕过”load指令接着执行。</p>
+<p>在简单五级流水线中，我们假定每一条指令的执行都一定会经历取指、译码、执行、访存、写回的阶段。事实上，某些指令确实不需要经历上述五个阶段当中的某些阶段，因此，我们需要想办法为数据的流动多提供一些通路，这样，当某个部件被使用，而接下来指令的执行并不需要这个部件的时候，就不用强迫流水线暂停下来。</p>
+<p>CDC公司于20世纪60年代建造的CDC 6600（本章题图）上首次应用了记分牌（scoreboard）算法。在CDC 6600上，记分牌算法将指令执行的控制分为四个阶段：发射、取数、执行、写回。发射阶段，对指令进行译码，并且检查是否存在写后写的数据依赖关系；取数阶段，等到将要执行的指令不存在数据依赖关系之后，读出操作数，这一阶段还解决了写后读的依赖关系；执行阶段对操作数进行操作；写回阶段，记分牌检查是否存在读后写依赖，如果存在，就暂停执行，不存在则向寄存器中写入数据。</p>
+<h4 id="_3">记分牌的结构</h4>
+<p>记分牌实际上是一个信息存储单元，记录了这三部分信息：指令状态、功能单元状态、寄存器结果状态。其中，指令状态主要指某条指令的执行处于哪个阶段当中，寄存器结果状态则指示了某个寄存器即将被哪个功能单元写入。功能单元状态记录的数据较为复杂，主要是关于操作数和某个功能单元是否处于繁忙状态。</p>
+<p><img alt="" src="../image/image_T6b0iw9qiH.png" /></p>
+<p>在记分牌算法中，一条指令能否被发射，取决于功能部件是否空闲和指令要写入的寄存器是否正要被其他指令写入，这就需要检查寄存器结果状态，以解决写后写冒险。</p>
+<p>取数阶段，如果源寄存器将要被其他指令所改写，那么当前指令就必须等待。在前序指令改写完寄存器后，才能取得正确的操作数。</p>
+<p>对于浮点运算等需要多周期才能完成的运算操作，在第一周期结束时需要将<span class="arithmatex">\(R_j\)</span>和<span class="arithmatex">\(R_k\)</span>设置为No，这样才不会影响其他指令取数。</p>
+<p>写回寄存器时，需要检查目的寄存器是否会被作为操作数源寄存器被其他指令所读取，实际上就是检查标记为Yes的<span class="arithmatex">\(R_j\)</span>和<span class="arithmatex">\(R_k\)</span>寄存器中是否有寄存器是当前指令的目的寄存器。如果有，那么说明有指令需要读取寄存器中的旧值，这个时候写回操作需要被暂停，等待读取结束后再写入，这样是为了解决读后写冒险。</p>
+<h4 id="_4">记分牌的优缺点</h4>
+<p>记分牌算法实际上实现了指令的顺序发射和乱序执行。既然指令还是顺序发射的，那么执行就依然会受到读后写和写后写冒险产生的数据冒险。由于记分牌规定每一条配置路线只能同时有一条指令处于执行过程中，因此后续相同类型的指令也就必须等待。最后，记分牌算法在写回时不是按照程序编写的顺序进行的，对于程序员来说，会造成程序调试上的困难。</p>
+<h3 id="tomasulo">Tomasulo算法</h3>
+<p>上面提到的记分牌算法中，如果遇到读后写（WAR）和写后写（WAW）这两种数据依赖关系，指令的执行就会受到阻塞。Tomasulo算法实际上是通过寄存器重名，解决了WAR和WAW这两类“伪数据依赖”。IBM System/360系列机器是最早使用这一架构的。</p>
+<h4 id="_5">数据依赖</h4>
+<p>我们来逐一研究WAW、WAR和RAW这三种数据依赖的情形。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>add x7, x1, x4
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>add x5, x7, x6
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>add x7, x1, x0
+</code></pre></div>
+<p>在上面这段汇编代码中，第一条指令和第三条指令都写入了x7寄存器，但实际上，第一条指令产生的x7作为源操作数被第二条指令所使用，然后，第三条指令又将某个运算产生的结果写入了x7寄存器。在这个过程中，x7寄存器仅仅是作为目的寄存器被两次写入，作为源操作数寄存器被一次读取而已。将第三条指令的目的寄存器替换为某个未被使用的寄存器，也不影响指令的执行和最终的结果。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>add x7, x1, x4
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>add x1, x6, x3
+</code></pre></div>
+<p>在上面这段汇编代码中，采用类似的思想，我们可以明白，第二条指令中的目的寄存器x1也完全可以替换为某个未被使用的寄存器，而不会导致结果的错误。</p>
+<p>上面两种数据依赖关系都是典型的“假依赖”；使用附加的寄存器资源，就能够解决问题，并且得到我们预期的结果。在实际生活中这种寄存器重名的思路也是非常常见的：某些学校会为入学的学生根据姓名拼音和入学年份给定校园网账号，如果有两个人拼音相同，则会使用类似zhangsan21a, zhangsan21b这样的方式加以区分。</p>
+<p>而RAW则是真正的数据依赖了。当我们讨论数据依赖，实际上是在说发生冒险的指令之间存在数据流动。如果我们的目标是尽快得到正确的结果，那么我们的结果存放在什么地方其实并不重要（只需要让程序员看上去是在预期的地方即可），因此WAW和WAR可以由寄存器重名解决。在RAW的情况下，某条指令产生的结果是真的需要被另一套指令所使用，因此我们说RAW是不可避免的数据依赖。</p>
+<h4 id="_6">寄存器重命名</h4>
+<p>附加的寄存器通常是ISA规定以外的一组物理资源。如下图所示，如果某个寄存器正要被改写或者被读取，那么置Busy位为1，并将数据写入到Tag指示的附加寄存器中。这样，新的数据可以立刻走完写回的过程，而程序顺序中排列靠前的指令可以读取到寄存器旧的值。</p>
+<p><img alt="" src="../image/image_jtV1fYqbv1.png" /></p>
+<p>还有一种思路，是为处理器提供超过指令集规定的寄存器个数，但是并不显示地区分哪个是指令集规定的寄存器，哪个是重名寄存器。程序员对寄存器的可见情况，取决于程序运行的状态——这些信息我们需要储存起来，依照这些信息，处理器可以像程序员展现某些特定的寄存器。</p>
+<h4 id="_7">硬件结构</h4>
+<p><img alt="" src="../image/image_yGvHUxPs0q.png" /></p>
+<h4 id="_8">算法优点</h4>
+<p>Tomasulo算法消除了三类数据冒险，可以实现指令的乱序执行。与记分牌相比，Tomasulo算法引入的保留站能够在每条通路下缓存若干指令，从而减少了结构冒险阻塞流水线带来的损失。</p>
+<p>Tomasulo算法中，引入了寄存器重名的思路，寄存器只保存最近写入的值。记分牌算法无法实现寄存器重命名，因此在遇到写后写冒险时只能阻塞流水线。</p>
+<p>记分牌在取数时需要时刻关注寄存器堆，必须等到寄存器堆内的数据准备好，才能取出来。因此，在读后写冒险中，程序中的后续指令不能立即将结果写回寄存器，否则可能导致前序指令取到错误的数据。Tomasulo算法在指令发射时就将寄存器中的数据拷贝到保留站中，之后寄存器中的值不论再怎么变化也不会影响保留站中的数据。</p>
+<h4 id="_9">算法缺点</h4>
+<p>在Tomasulo算法中，每一个功能单元都有一个保留站。如果一周期内有多条指令被准备好，那么功能单元也只能执行一条指令。一般而言，可以将保留站设计为队列，总是选择最先发射的指令执行。</p>
+<p>在上面的架构图中，我们只有1组CDB，这意味着如果在某一周期结束时有多条指令被执行完毕，我们也只能写回1组数据，其他组必须进行等待。或许增加CDB总线可以解决这个问题，但是这会带来更大的硬件消耗。</p>
+<p>为了支持指令的多发射，还需要对寄存器堆做一些额外的改造，例如增加读写端口等。在多发射的情况下还需要保证它们按照顺序发射一样的顺序更新保留站和寄存器结果状态表。对于存储指令，也需要做额外的控制，消除存储指令间的数据冲突。</p>
+<p>Tomasulo算法无法实现精确的中断。如果指令和指令之间出现了中断或异常，我们希望处理器要将中断/异常之前的指令全部执行完成，并且中断/异常之后的指令都不会被执行。精确中断是程序正确执行和调试必不可少的条件，但Tomusulo对寄存器的写入也是乱序的，因此它不支持精确中断。对于分支指令来说，如果分支预测错误，那么记分牌和Tomasulo算法都很难消除已经执行完毕但本不应该执行的指令带来的影响。为了支持分支指令和精确中断，就必须保证指令的按序提交。</p>
+<p>总体而言，现代桌面级处理器一般都是采用乱序执行+按序提交的方法进行工作的。</p>
+<h3 id="rob">重排序缓存ROB</h3>
+<p>ROB的核心思想在于按照指令在程序中的顺序进行提交。一条指令在执行完毕后并不会马上对寄存器的状态做出改变，而是先在缓冲区中等待，等到在程序中所有它前面的指令已经执行完毕并且提交以后，再将结果写回寄存器堆。</p>
+<p>一般来说，可以将ROB设计为一个队列，指令在发射的时候进入队列，在提交的时候出队。</p>
+<h4 id="tomasulo_1">改造后的Tomasulo硬件结构</h4>
+<p><img alt="" src="../image/image_48yZDJJarc.png" /></p>
+<p>与最初的Tomasulo相比，现在主要增加了Reorder Buffer（ROB）；CDB总线不再直接向寄存器堆写入数据；指令发射时可以从ROB中读出数据。</p>
+<p>每条指令发射时，ROB会为其分配一个编号，实际上是起到了寄存器重命名的作用。Busy位指示这一行是否存有指令；State位保存指令当前的运行情况，可以通过State来判断指令是否可以提交；Destination指示了指令的目的寄存器；value保存的是指令的结果，当可以提交时，value将被写入指令集规定的寄存器。此外，在一条指令执行完成但还不能提交时，后续指令可以从value中读出值，实现数据旁路的功能。</p>
+<h4 id="_10">要点概述</h4>
+<p>增加ROB后，指令能否发射主要取决于保留站和ROB是否空闲。如果都空闲，那么指令就可以发射。发射后，保留站和ROB都会增加1个占用，并且目的寄存器对应的寄存器结果状态表会被标记为ROB的编号——这就实现了寄存器的重命名。</p>
+<p>如果指令不能正确从寄存器堆取得数据，就会通过寄存器结果状态表查询。如果操作数由正在执行的指令给出，那么指令需要监听CDB，一旦数据在CDB上后，就从CDB转发到保留站中。如果操作数正在ROB中，还没有写回寄存器堆，那么就从ROB中读取。</p>
+<p>指令开始执行后，实际上就可以清除保留站中这条指令相关的信息了。执行完成以后，结果先通过CDB被写到ROB，而暂时不更新寄存器堆；等到这条指令之前所有的指令都已经提交之后，这条指令就可以提交，寄存器将被更新，ROB对应的Busy位将被置为无效。</p>
+<h4 id="_11">对分支预测的支持</h4>
+<p>ROB结构实现了指令的按序提交，因此可以在指令提交时检测分支结果。如果预测失败，就清除ROB中的全部指令，同时在下一周期使用分支指定的地址取指。对精确中断的支持原理也是类似的。</p>
+<h3 id="_12">寄存器重命名</h3>
+<p>我们之前已经多次提到过，只有RAW才是真数据依赖关系。那么，我们自然可以想到，通过增加一组寄存器，使其能够保存执行单元得到的结果，在合适的时候再写回逻辑寄存器堆，不就能够解决WAW和WAR当中寄存器数量不够用的问题了吗？</p>
+<p>事实确实如此。在前文介绍过的ROB中我们事实上已经开始使用隐式寄存器重命名技术。ROB中，value一项保存了指令执行的结果，这实际上就承担了额外的寄存器的作用。在这里我们继续介绍显式寄存器重命名的方法。在显式寄存器重命名的方案中，我们首先需要准备比逻辑寄存器数量多的物理寄存器，这些物理寄存器中既包含已提交的，也包含未提交的。</p>
+<p>我们使用一张对应表来指示程序员可见的逻辑寄存器和实际的物理寄存器的映射关系。提交一个物理寄存器，就是修改这张映射表，使得在访问某个寄存器时，指向修改后的物理寄存器。</p>
+<h3 id="_13">分支预测</h3>
+<p>如果希望增大指令级并行的力度，那么分支预测就成为了非常必要的部件。当流水线层数增加时，分支预测错误就要求清洗流水线中正在执行的取指错误的指令，然后再从正确的位置开始取指。如果在一个超标量流水线处理器中，则可能需要冲刷更多的功能部件。增加分支预测的准确度，在提升计算机的性能方面是十分重要的。在《数字逻辑与计算机设计》中，我们曾经简单地了解过分支预测的基本原则。我们最初实现了下面这样的最简单的2位分支预测器。</p>
+<p><img alt="" src="../image/image_rCzb8RJ7RA.png" /></p>
+<p>这个预测器的思想非常简单，假定我们设置状态机的初始状态为强跳转（11），在一次预测失败后变为弱跳转（10），再次预测失败后将变为弱不跳转（01），如果这次预测成功，则将变为强不跳转（00）。对于规律性很强的一些语句（例如确定的分支语句和循环语句），这个简单的预测器已经能够达到很好的效果，但是，随着流水线不断变深，分支预测失败的代价越来越大，因为硬件必须刷新掉低层级流水线阶段的数据，然后从正确的位置重新取指。</p>
+<p>能不能尽快决定是否跳转？答案是可以的。对流水线进行适当的划分，并控制好数据间的依赖关系，的确能够让我们在译码阶段就能判断某条指令是否会发生跳转，从而在分支预测错误时最多只需要刷新取指和译码阶段的流水线寄存器。然而这样对于译码阶段来说，时序压力可能会增大，从而处理器的主频可能受到影响。</p>
+<p>在今天，几乎所有的桌面处理器都采用了精妙的分支预测方法，来尽可能准地推测某条指令的跳转情况。</p>
+<h4 id="_14">关联预测器</h4>
+<p>尽管没有确切的数学方法证明某条分支的跳转情况不仅与该分支历史跳转情况相关，还与其他分支的行为有关系，但是实践中发现，对于这些信息的巧妙运用，的确能够提高分支预测的准确率。假设有下面这样的代码：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{...}</span>
+</code></pre></div>
+<p>我们将上述分支标记为b0、b1和b2，显然b2跳转与否与b0和b1的行为相关。如果b0和b1都没有发生跳转（顺序执行），那么这意味着在进入b3的条件判断时，变量a的值一定为0，变量b的值一定为1，从而b3一定会发生跳转。如果我们只考虑b3本身的行为，那么上面所示的最简单的2位分支预测器就不能提供正确的答案。</p>
+<p>现在我们可以考虑把其他分支的行为也纳入我们的考虑中。我们可以构建若干个表项，并将最近<span class="arithmatex">\(m\)</span>个分支的跳转情况与分支地址的低地址位拼接，通过某种哈希函数在表项中检索。每个表项实际上也是一个类似上面提到的简单2位分支预测器。一般情况下，我们可以构造一个<span class="arithmatex">\((m,n)\)</span>预测器，其含义是利用最近<span class="arithmatex">\(m\)</span>个分支的行为进行检索，每个检索项都是一个简单<span class="arithmatex">\(n\)</span>位分支预测器。我们把这种预测器称为关联预测器（correlating predictor）或两级预测器（two-level predictor）。</p>
+<p>对于硬件设计人员来说，这样做并不需要花费太多的精力，但是预测准确率会有很大的提升。</p>
+<h5 id="gshare">Gshare预测器</h5>
+<p>Gshare分支预测器非常容易实现，并且具有很好的实用价值。在Gshare中，分支地址的低10位与全局最近10次分支历史的移位寄存器值做异或操作，然后作为索引去从1024个2位预测器的状态机中查找是否跳转的结论。</p>
+<p><img alt="" src="../image/image_G0sUFjB4CF.png" /></p>
+<p>在Gshare中，对局部分支信息的利用主要体现在2位状态机的转台变化上。这种将局部分支历史和全局分支历史相结合使用的预测器被称作融合预测器（alloyed predictor）或混合预测器（hybrid predictor）。但是，由于全局分支历史结果不断在变化，很难出现分支地址与最近分支结果进行异或操作后一定命中某个状态机。有些情况下，可能显式地确切展现出局部分支历史会更有效。</p>
+<h4 id="_15">竞争预测器</h4>
+<p>正如名称所表示的那样，竞争预测器（tournament predictor，直译为锦标赛分支预测器）的预测结果来自多个预测器的竞争，它通常会显式地标明对于某一条分支地址而言，一定对应某个状态机。在现在的设计中，每一条分支地址被分配了一个选择器，选择器的值表示是选择来自全局预测器的结果，还是选择来自局部预测器的结果。其余部分可以简单理解为是一个全局预测器加上一个局部预测器。与2位状态机预测器采取的策略一样，只有在连续两次预测失败时，选择器的选择才会发生变化。</p>
+<p><img alt="" src="../image/image_50KQ3psGMa.png" /></p>
+<p>在这个分支预测器中，如果预测错误，不仅需要同时更新全局预测器和局部预测器的状态机，还需要更新选择器的状态机。它的优势在于它能够为特定分支选择正确的预测器，当分支情况很复杂而出现多次时，这个预测器的效果将会很好。</p>
+<h4 id="_16">带标签的混合预测器</h4>
+<p>2006年，André Seznec和Pierre Michaud提出了TAGE分支预测器，使用一系列不同长度的全局历史帮助索引来进行预测。TAGE及其变种之后在Championship Branch Prediction比赛中多次拿下冠军。在论文中，TAGE的结构如下图所示。</p>
+<p>与Gshare类似，TAGE将最近的一些分支记录保存到移位寄存器中。在P(i)中，PC与长度为L(i)的分支历史记录进行哈希操作（比如异或），然后与标签作比较，只有当标签与散列的结果一致时，才会使用P(i)中的预测。事实上，标签可以很短，而不需要使其位数和L(i)一致。</p>
+<p><img alt="" src="../image/image_8un1DMPGCM.png" /></p>
+<p>如果P(n)到P(1)都没有成功匹配，那么P(0)将成为预测结果的来源，它是一个简单2位状态机预测器。TAGE还有许多实现上的具体细节，例如如何定期将所有项中的重复字段进行复位以清除过早的预测等。</p>
+<p>从现实世界来看，现代CPU使用了多种技术来提高分支预测准确度。桌面级产品大多都使用了TAGE预测器。近年来，AMD Ryzen也将简单的神经网络用于分支预测（受限于硬件实现而不能承载一个大型网络），随着单个程序的运行，分支预测准确率会不断提高。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../01-simplest/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 从无到有的历程：最简单的计算机" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                从无到有的历程：最简单的计算机
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../05-optimization/" class="md-footer__link md-footer__link--next" aria-label="Next: 局部与整体协调：优化程序性能" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                局部与整体协调：优化程序性能
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      沙河小分队 蜀ICP备2021028983号-2
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+
+  
+
+<h4>Cookie 使用说明</h4>
+<p>我们使用 Cookie 来识别您的重复访问和偏好，从而衡量我们文档的有效性以及用户是否找到他们正在搜索的内容。您对 Cookie 的接受将帮助我们改进文档。</p>
+<input class="md-toggle" type="checkbox" id="__settings" checked>
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

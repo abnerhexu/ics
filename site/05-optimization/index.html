@@ -1,0 +1,868 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../04-ilp/">
+      
+      
+        <link rel="next" href="../06-memory/">
+      
+      <link rel="icon" href="../image/logo.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
+    
+    
+      
+        <title>局部与整体协调：优化程序性能 - 计算机系统导论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans SC";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="计算机系统导论" class="md-header__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机系统导论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              局部与整体协调：优化程序性能
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="计算机系统导论" class="md-nav__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    计算机系统导论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          程序员视角的计算机系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          程序员视角的计算机系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-simplest/" class="md-nav__link">
+        从无到有的历程：最简单的计算机
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ilp/" class="md-nav__link">
+        乱序执行的魔法：数据依赖与指令级并行
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          局部与整体协调：优化程序性能
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        局部与整体协调：优化程序性能
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    性能计数器
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    现代计算机的性能瓶颈
+  </a>
+  
+    <nav class="md-nav" aria-label="现代计算机的性能瓶颈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    高速缓存
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    编写Cache友好的代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    编写指令级并行友好的代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    减少过程调用
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    操作系统的任务调度对程序性能的影响
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-memory/" class="md-nav__link">
+        虚拟化硬件视图：内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-parallel/" class="md-nav__link">
+        聚沙成塔的道路：并行计算机系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-dsa/" class="md-nav__link">
+        专用领域加速器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          yhcore：一个RISC-V操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          yhcore：一个RISC-V操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06.md" class="md-nav__link">
+        裸机上的程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    性能计数器
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    现代计算机的性能瓶颈
+  </a>
+  
+    <nav class="md-nav" aria-label="现代计算机的性能瓶颈">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    高速缓存
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cache" class="md-nav__link">
+    编写Cache友好的代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    编写指令级并行友好的代码
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    减少过程调用
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    操作系统的任务调度对程序性能的影响
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">局部与整体协调：优化程序性能</h1>
+<p>当我们造出一台新机器，我们当然想知道，我们的机器有“多好”，也就是我们的机器实际使用起来的性能怎么样。</p>
+<p>上世纪80年代以后，特别是90年代以来，计算机发展的一个重要引导性因素，就是对计算机的评测定量化了。也就是说，为了得到能够让大多数人都认可的结果，说明某一个计算机在某种条件下具体的性能指标是多少，对计算机的评测变得定量化起来。</p>
+<p>在我们的单核处理器上，我们考虑这样的标准：</p>
+<div class="arithmatex">\[
+\text{CPU时间}=\frac{运行时间}{程序}=\frac{指令数}{程序}\times \frac{时钟周期数}{指令数}\times \frac{运行时间}{时钟周期数}
+\]</div>
+<p>我们来解释这个事情，直观上，我们给定1个程序，那么从这个程序开始执行到执行完成所耗费的，我们在现实世界中可以直接通过测量得到的时间就被认为是运行时间。根据处理器设计的原理，这个计算方式又可以被展开为三个指标相乘。</p>
+<p>指令数和程序的比值表现了对于相同的高级语言（例如C）程序，依照指令集手册生成的指令数量多少；这个值越高，说明完成相同的工作需要执行更多的指令数量，从而也需要更多的时钟周期。要想减小这个指标，一方面需要编译器的工作，在保证计算机系统状态机可观测行为一致的情况下，生成尽可能少的指令数量；一方面需要优化指令集设计。</p>
+<p>时钟周期数和指令数的比值表现了执行每条指令需要的平均时钟周期数，也就是每指令周期数（CPI, Cycle per instruction），其倒数每周期指令数（IPC, Instruction per cycle）的增大依赖于对微处理器体系结构设计的改进。</p>
+<p>运行时间和时钟周期数的比值主要和处理器的主频有关，通过优化电路设计，使用更先进的制程，可以使处理器具有更高的主频。此外，不可否认的是，微处理器体系结构和编译器的设计也会对这项指标产生影响，但这里我们主要考虑主频。</p>
+<h3 id="_2">性能计数器</h3>
+<p>性能计数器（performance counter）就是能够帮助我们确定计算机性能的部件，而性能指标事实上是统计给出的。一般而言，我们需要统计的就是上方公式右侧的三个乘积项分别的值。</p>
+<p>既然叫“计数器”，这个部件的主要功能也确实就是计数。为了得到指令数/程序，我们直接简单统计运行的程序所具有的指令条数；在此基础上，为了得到时钟周期数，我们需要监控每一条指令的执行情况。</p>
+<p>RISC-V指令集手册规定了三个重要的寄存器：time、cycle和instret。</p>
+<p>time寄存器统计的是自CPU复位以来一共经历的时间，由于处理器的频率可能会发生动态的变化，驱动time寄存器的时钟周期通常是固定并且已知的。不论是在32位还是64位的机器上，RISC-V手册都规定time寄存器必须是64位的。在这样的情况下，假如我们选用的驱动time寄存器的时钟频率为10GHz，也需要耗费58年才能使time寄存器发生溢出。对于一款产品而言，这已经远远超过了它的生命周期。</p>
+<p>cycle寄存器主要反映了自CPU复位以来一共运行了多少个周期，instret寄存器记录自CPU复位以来一共执行了多少条指令。有一些指令（例如浮点数的乘法）需要执行若干个周期，并且由于访问存储器会有一定的延迟，这些时间也会被记录到cycle寄存器中。</p>
+<p>我们将处理器分为前端（frontend）和后端（backend），前端主要关心指令的获取（下图蓝色框内的部分），而后端主要就是指令的执行（下图绿色框内的部分）。一个良好的处理器设计要求前端必须要保证在每个周期内尽可能多地向后端供应指令，而后端也必须在每周期内尽可能多地执行指令，并通过指令级并行的方法来尽可能减缓数据依赖对流水线带来的影响。</p>
+<p><img alt="" src="../image/image__i4LWdoXXG.png" /></p>
+<h3 id="_3">现代计算机的性能瓶颈</h3>
+<p>自从集成电路成为处理器设计的基础，处理器性能提高得很快。在过去的数十年间，CPU的发展大多数时候与摩尔定律预言的情况相吻合。在1980年代，CPU的性能以每年1.25倍左右的速度递增；1990年以后，CPU的性能以每年1.57倍的速度递增，到1999年，Intel Pentium III已经来到了800MHz的主频和180nm的制程。直到2004年之后，CPU的性能仍然以大约每年1.2倍左右的性能提升。</p>
+<p>然而，作为冯·诺依曼体系结构中的另一重要组成部分，存储器，其进步则是十分缓慢的。</p>
+<p><img alt="" src="../image/image_tAHK-PPRrV.png" /></p>
+<p>我们希望的存储器当然是空间无限大、访问延迟为0的一类设备，但是由于物理规律的限制，一般而言，我们所能制造出的存储器通常具有这样的特点：容量与访问延迟不可兼得。为了构造一个近似接近理想的存储器，现代计算机一般具有多级的存储结构，小而快的存储器存放最近更可能使用到的数据，而远离CPU的存储器存放在最近的时间段内不太可能被访问到的内容。</p>
+<p><img alt="" src="../image/image_kd9AS9aTAp.png" /></p>
+<p>设计这样的存储结构主要依赖于计算机程序设计的局部性规律。一个编写良好的软件倾向于显示出良好的局部性，主要是时间局部性和空间局部性。例如，在循环中，当我们访问了数组的某一个元素，那么我们很大可能会紧接着访问它之后的元素；而循环体内的代码则会在一段时间内被反复执行。</p>
+<p>所以，对于一般的程序而言，仅仅简单优化对存储器的访问，就能得到很好的性能提升。</p>
+<h4 id="_4">高速缓存</h4>
+<p>高速缓存（Cache）中保存了来自下一个存储层次中的一小部分内容，以便CPU能够尽可能快地得到数据。通用的高速缓存的结构一般如下图所示。</p>
+<p><img alt="" src="../image/image_etmDpfAgLZ.png" /></p>
+<p>一般来说，我们可以将一个地址分为三部分：标记、组索引和块偏移。在访存时，通过这三部分，就能够在Cache中找到对应的数据（但不一定有效）。首先，通过组索引在Cache中找到对应的组，然后，进行行匹配和字选择，整个过程可以用下面这张图来形象地表示。</p>
+<p><img alt="" src="../image/image_OiyTCQ_p3d.png" /></p>
+<h3 id="cache">编写Cache友好的代码</h3>
+<p>从高速缓存的结构我们基本可以看出，要想充分利用好缓存，就要尽可能多地提高程序的空间局部性。考察下面这段代码，我们希望计算一个N×N的矩阵每一列的和。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#define N 512</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">col_sum</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">colsum</span><span class="p">[</span><span class="n">N</span><span class="p">]){</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="n">colsum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">            </span><span class="n">colsum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
+</code></pre></div>
+<p>这段代码执行起来是非常低效的。在读取matrix[0][0]时，我们认为matrix[0][0]及其附近的元素也会被保存到Cache中，但是，我们接下来却访问了matrix[1][0]。由于在C语言中，矩阵的内存是依照行优先的方式进行组织的，所以matrix[1][0]与matrix[0][0]相距了512*4个字节，通常情况下它们不会出现在Cache的同一行中，所以同样不命中（Cache miss）。当完成了关于j的一轮循环后，终于将访问matrix[0][1]了，虽然在访问matrix[0][0]时我们已经将其保存到了Cache中，但由于Cache是很小的一块存储器，在这个时候保存着matrix[0][1]的Cache行很容易已经被替换出去了，于是这个时候又产生了Cache不命中。</p>
+<p>事实上，交换两层循环，就能有很好的优化效果。我们分别遍历每一行，但在遍历每一行时，分别将每一行的数据都做加法。这样一来，在每一行内部，很容易命中，同时colsum数组内的数据由于每次都会访问，因此也很容易命中。这样一来，我们就能很好地提高性能。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#define N 512</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">cache_friendly_col_sum</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">colsum</span><span class="p">[</span><span class="n">N</span><span class="p">]){</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="n">colsum</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">            </span><span class="n">colsum</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="p">}</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+</code></pre></div>
+<p>这两种方式的性能能相差多少呢？在我们的Intel(R) Xeon(R) Gold 6230 CPU上，我们测试了若干组数据，可以看出两种方式确实是有差异的，在数据规模较大时，第二种方法得到的性能要好得多。</p>
+<p><img alt="" src="../image/image_i7viOWR5uu.png" /></p>
+<h3 id="_5">编写指令级并行友好的代码</h3>
+<p>回顾我们在指令级并行一章讨论过的话题，一个处理器上可以配置多条流水线，它们同时取指，并且有不同的功能单元可以同时计算。这样一来，像浮点数的乘法这样需要耗费较多时间的计算就有可能被调度到多个不同的功能单元并行地计算。以多项式的计算为例，数组poly保存了由低次向高次的系数，我们要做的工作是计算<span class="arithmatex">\(\sum_{i=0}^{n-1}a_ix^i\)</span>。</p>
+<p>我们在高中数学课堂上，讲述算法初步时就曾经提到过秦九韶算法，并且证明了对于一个<span class="arithmatex">\(n\)</span>次多项式的计算，秦九韶算法只要求我们进行<span class="arithmatex">\(n\)</span>次的乘法和<span class="arithmatex">\(n\)</span>次的加法。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">double</span><span class="w"> </span><span class="nf">poly_qin</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">coeff</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">){</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">--</span><span class="p">){</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</code></pre></div>
+<p>作为对比，我们选择一个普通的算法，这个算法要求我们进行<span class="arithmatex">\(2n\)</span>次的乘法和<span class="arithmatex">\(n\)</span>次加法。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">double</span><span class="w"> </span><span class="nf">poly_naive</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">coeff</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">){</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xpwr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xpwr</span><span class="p">;</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="n">xpwr</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</code></pre></div>
+<p>但是，如果我们对朴素算法的程序稍加改写，变成下面这样的形式。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">double</span><span class="w"> </span><span class="nf">poly_naive_ext</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">coeff</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">){</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">result1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">result2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">result3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xpwr1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xpwr2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">xpwr3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xpwr3</span><span class="o">*</span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="k">register</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">limit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">limit</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="n">result1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xpwr1</span><span class="p">;</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="n">result2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xpwr2</span><span class="p">;</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="n">result3</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xpwr3</span><span class="p">;</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="n">xpwr1</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">step</span><span class="p">;</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="n">xpwr2</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">step</span><span class="p">;</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">    </span><span class="n">xpwr3</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">step</span><span class="p">;</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">  </span><span class="n">result1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">result2</span><span class="p">;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">  </span><span class="n">result1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">result3</span><span class="p">;</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">  </span><span class="p">{</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="n">result1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">coeff</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">xpwr1</span><span class="p">;</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="w">    </span><span class="n">xpwr1</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result1</span><span class="p">;</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="p">}</span>
+</code></pre></div>
+<p>在我们的Intel i9上测得了如下数据。</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>秦九韶公式</th>
+<th>朴素算法</th>
+<th>朴素算法的循环展开</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPE(GCC -O0)</td>
+<td>1.80</td>
+<td>1.62</td>
+<td>0.90</td>
+</tr>
+</tbody>
+</table>
+<p>循环展开为指令级并行提供了绝佳的条件，从上面这张表可以看出，朴素算法的循环展开使得多条指令能够在同一时刻并行执行。而秦九韶公式由于紧密的数据依赖关系，使得我们无法通过循环展开，让不同阶段循环体并行执行。</p>
+<p>在<em>Computer System: A Programmer's Perspective</em>中，这个现象是这样被解释的。在朴素算法中，性能限制在于反复计算表达式xpwr=x*xpwr，这个运算（浮点乘法）需要的时钟周期数大于对result更新所需要的时钟周期数（浮点加法），因此CPE主要由浮点乘法所消耗的时钟周期决定；而在秦九韶算法中，我们必须先将result乘上x，再加上一个常数，以达到更新result的目的，这两个操作不能被拆分，且下一个循环中的计算依赖于这一次循环的结果，这种情况被称作跨循环迭代依赖（loop-carried dependency）。因此CPE由浮点数的乘法和加法所消耗的共同时间来决定。</p>
+<p>这个解释给人们带来了很大的冲击，由于计算机硬件的限制，时间复杂度更低的算法可能反而需要消耗更多的时间。</p>
+<p>上面的解释大体上我们是认同的，但通过我们的观察，事实也不完全是这样。尽管我们希望处理器在全部时刻都能够完全地“乱序”执行的，但事实证明，如果我们不进行手动的循环展开，处理器似乎还是没有将朴素算法中的浮点乘法与浮点加法完全乱序的执行，这也是我们观察到的没有进行循环展开的朴素算法CPE还是会比循环展开后高一些。</p>
+<h3 id="_6">减少过程调用</h3>
+<p>或许软件工程的研究人员会认为代码复用是非常重要的，即“一处修改，处处可用”。但是，如果我们希望一个程序获得更好的性能，那我们就必须要减少过程调用。</p>
+<p>在指令系统一章，我们曾经探讨过过程调用的基本流程。过程调用往往需要多次访问存储器，如果在一段代码中存在频繁的过程调用，那这又对存储器带来了不小的挑战。</p>
+<p>对于在一个循环体内出现，但每次总会得到完全一致的结果的过程调用，我们可以简单地将其移出循环体，就能达到很好的性能提升。对于其他的情况，C语言内联函数机制让软件的模块性与性能达到了总体上的和谐。通过关键词inline，我们就能把函数插入到我们希望调用它的地方。当然，如果这个函数本身很大，并且在很多地方都被调用的话，编译得到的程序可能也会很大。</p>
+<h3 id="_7">操作系统的任务调度对程序性能的影响</h3>
+<p>2020年，Apple以迅雷不及掩耳之势发布了桌面端Apple Silicon芯片。和之后2022年Intel发布的第12带酷睿处理器一样，Apple Silicon芯片也将处理器分为了性能核（Firestorm，称为P核）和能效核（Icestorm，称为E核）。P核一般拥有更高的时钟频率、更大的缓存和更多的功能部件以增大指令并行度，而E核往往拥有更低的功耗。</p>
+<p>对于一个程序，到底应该被放到P核上运行，还是放到E核上运行，这个调度时机和策略应当如何在性能和功耗上取得巧妙的平衡，是一个前沿的话题。</p>
+<p><img alt="" src="../image/image_8xg6KLhni-.png" /></p>
+<p>考虑这样一个简化后的系统，我们有2个性能核和8个能效核。每个核都独立拥有自己的L1 Cache，每一组内都独立拥有组内的L2 Cache，这两个组共同拥有一个较大的L3 Cache。这时，如果我们运行一个访存较为密集的程序，一种理想的调度是这个程序应该被放置在能效核上运行，假设我们将其放置在E0核上。程序运行结束后，我们再次开启四个进程，运行与刚刚运行过的完全一致的程序，这时的就存在一种调度策略，认为出于负载均衡的意愿，操作系统应当将4个进程均摊到两个组内运行。但是，考虑到这是一个访存密集型程序，如果能得到很好的存储器友好的运行策略，那么运行性能一定会有很大的提升。在像MacOS这样的商业桌面操作系统上，我们发现这4个进程将全部在E0所在的组内4个能效核上运行。究其原因，是因为它们共享了L2 Cache，而在测试过程中L2 Cache内大部分内容还没有被别的程序替换出去，这样就能极大地减轻访存压力，从而在能效核上也能有很好的性能，并且能够很好地控制功耗。</p>
+<p>将比之下，Windows10的性能调度策略就要弱化很多。在第12代及以后的Intel处理器下，Windows10的调度策略仅仅只是简单地将前台应用尽可能多地放置到性能核上，而将后台应用全部放置到能效核上。对于一些希望在后台运行程序，前台处理其他工作的人群来说，这是不太友好的，因为在后台运行的程序往往会运行很长的时间。</p>
+<p>为了较为准确地测试一个程序实际的运行情况，我们一般希望将其绑定在某个核心上运行，这也是我们在前文中测试时所采用的方法。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../04-ilp/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 乱序执行的魔法：数据依赖与指令级并行" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                乱序执行的魔法：数据依赖与指令级并行
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../06-memory/" class="md-footer__link md-footer__link--next" aria-label="Next: 虚拟化硬件视图：内存管理" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                虚拟化硬件视图：内存管理
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      沙河小分队 蜀ICP备2021028983号-2
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+
+  
+
+<h4>Cookie 使用说明</h4>
+<p>我们使用 Cookie 来识别您的重复访问和偏好，从而衡量我们文档的有效性以及用户是否找到他们正在搜索的内容。您对 Cookie 的接受将帮助我们改进文档。</p>
+<input class="md-toggle" type="checkbox" id="__settings" checked>
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>

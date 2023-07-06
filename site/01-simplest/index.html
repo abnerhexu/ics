@@ -1,0 +1,964 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../04-ilp/">
+      
+      <link rel="icon" href="../image/logo.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.11">
+    
+    
+      
+        <title>从无到有的历程：最简单的计算机 - 计算机系统导论</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.85bb2934.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a6bdf11c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Noto Sans SC";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="计算机系统导论" class="md-header__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            计算机系统导论
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              从无到有的历程：最简单的计算机
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="计算机系统导论" class="md-nav__button md-logo" aria-label="计算机系统导论" data-md-component="logo">
+      
+  <img src="../image/logo.png" alt="logo">
+
+    </a>
+    计算机系统导论
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/abnerhexu/uc-1" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    abnerhexu/uc-1
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          程序员视角的计算机系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          程序员视角的计算机系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          从无到有的历程：最简单的计算机
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        从无到有的历程：最简单的计算机
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    数字电路
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    指令集
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    C语言程序
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#freestanding" class="md-nav__link">
+    自制freestanding运行时环境
+  </a>
+  
+    <nav class="md-nav" aria-label="自制freestanding运行时环境">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c_1" class="md-nav__link">
+    使用C语言变量模拟寄存器与内存
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c_2" class="md-nav__link">
+    使用C语言模拟指令的语义
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    初始状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    一种简单实现的代码框架
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    控制程序的结束
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    最简单的操作系统
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    软硬件的联系
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-ilp/" class="md-nav__link">
+        乱序执行的魔法：数据依赖与指令级并行
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-optimization/" class="md-nav__link">
+        局部与整体协调：优化程序性能
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-memory/" class="md-nav__link">
+        虚拟化硬件视图：内存管理
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-parallel/" class="md-nav__link">
+        聚沙成塔的道路：并行计算机系统
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-dsa/" class="md-nav__link">
+        专用领域加速器
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          yhcore：一个RISC-V操作系统
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          yhcore：一个RISC-V操作系统
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06.md" class="md-nav__link">
+        裸机上的程序
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    数字电路
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    指令集
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#c" class="md-nav__link">
+    C语言程序
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#freestanding" class="md-nav__link">
+    自制freestanding运行时环境
+  </a>
+  
+    <nav class="md-nav" aria-label="自制freestanding运行时环境">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c_1" class="md-nav__link">
+    使用C语言变量模拟寄存器与内存
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c_2" class="md-nav__link">
+    使用C语言模拟指令的语义
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    初始状态
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    一种简单实现的代码框架
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    控制程序的结束
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    最简单的操作系统
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    软硬件的联系
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="_1">从无到有的历程：最简单的计算机</h1>
+<p>开始之前，我们首先介绍一个非常基本的概念——状态机。简单来说，状态机是这样的一种设备：它保存着当前的某个状态；某一时刻，受到某个外部激励后，状态机保存的状态改变，即状态按照一定的规则迁移。例如，某个十字路口两盏红绿灯随时间的变化，会发生有规律地变化，因此，我们可以将它看作一个状态机。</p>
+<p>想象这样的一个情景：一个东西、南北走向的十字路口有两组信号灯<span class="arithmatex">\(L_A\)</span>和<span class="arithmatex">\(L_B\)</span>，同一时刻<span class="arithmatex">\(L_A\)</span>和<span class="arithmatex">\(L_B\)</span>只能有一个为绿灯，表示该方向的车辆可以直走通行。于是，交通信号灯的变化可以通过下面的状态机来表示。初始时，我们设定<span class="arithmatex">\(L_A\)</span>为红灯，<span class="arithmatex">\(L_B\)</span>为绿灯，那么经过一段时间后，<span class="arithmatex">\(L_B\)</span>就会变为黄灯，此时<span class="arithmatex">\(L_A\)</span>仍为红灯；再接下来的变化是<span class="arithmatex">\(L_A\)</span>变为绿灯，<span class="arithmatex">\(L_B\)</span>变为红灯；再然后是<span class="arithmatex">\(L_A\)</span>变为黄灯，<span class="arithmatex">\(L_B\)</span>保持红灯；然后，重新进入<span class="arithmatex">\(S0\)</span>所表示的状态中。</p>
+<p><img alt="图1-1 交通信号灯状态机" src="../image/1-1_PgzhuVCKJL.svg" title="图1-1 交通信号灯状态机" /></p>
+<p>将上面的例子抽象出来，我们就可以描述状态机模型的一些特点。例如，状态机拥有一个状态集合<span class="arithmatex">\(S=\{ S_0, S_1, ... \}\)</span>；此外，状态机模型还规定了状态机的初始状态；在不同的激励下，状态机会迁移到某个特定的状态（次态，next state），这个迁移的过程，而已通过状态转换图的方式直观地呈现出来。</p>
+<p>事实上，计算机系统及其在不同层次（数字电路、指令集、程序）的抽象，都可以借助状态机的概念来认识。</p>
+<h3 id="_2">数字电路</h3>
+<p>如果说在数字电路抽象层次上，计算机系统是一个状态机，应当说还是比较好理解的。回顾我们在《数字逻辑与计算机设计》课程中的实验，我们构造的数字逻辑电路不外乎时序逻辑电路和组合逻辑电路。时序逻辑电路在时钟信号的激励下，可以更新寄存器的值，而组合逻辑电路为寄存器新的值提供了变化的依据。我们也使用Verilog描述过一个数字电路如何在外界信号输入下依照某种规律进行运转的电路，并在FPGA上呈现。</p>
+<p>这个时候我们可以定义的是，状态集合<span class="arithmatex">\(S=\{ \{ v_{11}, v_{21}, ...\}, \{v_{12}, v_{22}, ...\}, ... \}\)</span>，其中<span class="arithmatex">\(v_{11}, v_{21}, ...\)</span>代表了时序逻辑元件当前的值。也就是说，全部时序逻辑元件的值构成的集合构成了状态集合。初始状态则是复位时时序逻辑元件的值。组合逻辑可以依据输入产生输出，从而提供了状态机的激励；最后，状态机在不同的状态间如何转移，也有一套特定的依据。</p>
+<h3 id="_3">指令集</h3>
+<p>指令集（instruction set）为计算机执行什么样的操作提供了依据。从状态机的视角来看，它定义了一个模型，其中的状态集合<span class="arithmatex">\(S=\{ &lt;R, M&gt;\}\)</span>，其中<span class="arithmatex">\(R=\{ \text{PC}, \text{x0}, \text{ra}, ...\}\)</span>表示寄存器的值；<span class="arithmatex">\(M=\{ \text{Mem[0]}, \text{Mem[1]}, ...\}\)</span>表示内存中数据的值。指令系统也定义了初始状态，例如可以定义初始时<span class="arithmatex">\(\text{PC}=0\)</span>，即从内存中地址为0的地方开始执行程序。通过PC指向的内存地址读取出的指令，就是电路的激励；而指令的实际语义（sematics），就是状态转移的规则。</p>
+<p>通过数字电路实现指令集所描述的状态机，我们就能执行指令，进而运行程序了。</p>
+<h3 id="c">C语言程序</h3>
+<p>现在我们到了比较高的抽象层次，C语言程序。C语言程序所构成的状态机模型的状态集合<span class="arithmatex">\(S=\{ &lt;V, \text{PC}&gt; \}\)</span>，其中<span class="arithmatex">\(V\)</span>代表了程序中全部变量的值，<span class="arithmatex">\(\text{PC}\)</span>是这个程序当前执行到的语句。激励是<span class="arithmatex">\(\text{PC}\)</span>所指向的语句，状态转移规则是语句的语义。在这里，C语言程序的初始状态<span class="arithmatex">\(S_0=&lt;V_0, \text{PC}_0&gt;\)</span>。<span class="arithmatex">\(V_0\)</span>是好理解的，我们在编写C语言程序时可能会预先为变量设置初始值，<span class="arithmatex">\(\text{PC}_0\)</span>则是C语言程序所执行的第一条语句。至于C语言程序从哪里开始执行，C99手册提供了下面的说法。</p>
+<div class="admonition note">
+<p class="admonition-title">5.1.2 Execution environments</p>
+<p>Two execution environments are deﬁned: <em>freestanding</em> and <em>hosted</em>. In both cases, <em>program startup</em> occurs when a designated C function is called by the execution environment. All objects with static storage duration shall be <em>initialized</em> (set to their initial values) before program startup. The manner and timing of such initialization are otherwise unspeciﬁed. Program termination returns control to the execution environment.</p>
+</div>
+<p>也就是说，运行环境负责去调用某个专门的C语言函数，从而程序得以运行。</p>
+<div class="admonition note">
+<p class="admonition-title">5.1.2.1 Freestanding environment</p>
+<p>In a freestanding environment (in which C program execution may take place without any beneﬁt of an operating system), the name and type of the function called at program startup are implementation-deﬁned. Any library facilities available to a freestanding program, other than the minimal set required by clause 4, are implementation-deﬁned.</p>
+<p>The effect of program termination in a freestanding environment is implementation-deﬁned.</p>
+</div>
+<p>在freestanding的环境下，这个C语言函数是由实现具体定义的。</p>
+<div class="admonition note">
+<p class="admonition-title">5.1.2.2 Hosted environment</p>
+<p>5.1.2.2.1 Program startup</p>
+<p>The function called at program startup is named main. The implementation declares no prototype for this function.&#x20;</p>
+</div>
+<p>在hosted的环境下，这个C语言函数被固定为main()。这也就是为什么我们一开始写最简单的C语言程序时，我们总是从main()开始学习的。</p>
+<p>顺便，我们解决了一个重要问题，什么是汇编器？汇编器（compiler）的工作，是将C语言程序所描述的状态机翻译为指令集系统描述的状态机。由于汇编代码就是由C语言描述的状态机翻译得来的结果，因此汇编语言的学习就被简化为查阅手册，然后像写C语言程序那样描述状态机。</p>
+<h3 id="freestanding">自制freestanding运行时环境</h3>
+<p>我们接下来就将自制一个最简单的运行时环境，来为我们写的其他的程序的执行提供必要的支持。</p>
+<p>采用RISC-V指令集，假设我们的程序从内存地址为0的地方开始执行，我们计划支持RISC-V指令集的一个子集，其中包含</p>
+<ul>
+<li>存储器访问指令load doubleword (ld)和store doubleword (sd)；</li>
+<li>算术逻辑运算指令add, addi, sub, and, or, andi；</li>
+<li>条件分支指令branch if equal (beq)；</li>
+<li>跳转并链接指令：jump and link (jal)和jump and link register (jalr)；</li>
+<li>ebreak指令：当寄存器a0=0时，输出寄存器a1的低8位字符，当寄存器a1=1时，结束运行。</li>
+</ul>
+<p>现在我们编写一段能够输出字符Hello的程序，当然，我们要始终记住的是，我们没有\<stdio.h>这样的头文件，并且我们编写的代码只能包含上面所说的若干指令！</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">ebreak</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">arg0</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">arg1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="k">asm</span><span class="w"> </span><span class="k">volatile</span><span class="p">(</span><span class="s">&quot;addi a0, x0, %0;&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">               </span><span class="s">&quot;addi a1, x0, %1;&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">               </span><span class="s">&quot;ebreak&quot;</span><span class="o">::</span><span class="s">&quot;i&quot;</span><span class="p">(</span><span class="n">arg0</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;i&quot;</span><span class="p">(</span><span class="n">arg1</span><span class="p">));</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">putch</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="n">ch</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ebreak</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ch</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">halt</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ebreak</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">code</span><span class="p">);</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="kt">void</span><span class="w"> </span><span class="nf">_start</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">putch</span><span class="p">(</span><span class="sc">&#39;H&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">putch</span><span class="p">(</span><span class="sc">&#39;e&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">putch</span><span class="p">(</span><span class="sc">&#39;l&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="n">putch</span><span class="p">(</span><span class="sc">&#39;l&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">  </span><span class="n">putch</span><span class="p">(</span><span class="sc">&#39;o&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="n">halt</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">}</span>
+</code></pre></div>
+<p>这段代码通过riscv-gcc编译，然后使用llvm-objdump反汇编，我们确实可以看到这个程序只包含了我们要实现的子集中的指令。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">编译命令</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>riscvgcc<span class="w"> </span>-march<span class="o">=</span>rv64g<span class="w"> </span>-ffreestanding<span class="w"> </span>-nostdlib<span class="w"> </span><span class="se">\ </span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>-static<span class="w"> </span>-Wl,-Ttext<span class="o">=</span><span class="m">0</span><span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>hello<span class="w"> </span>hello_freestanding.c
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>llvm-objdump<span class="w"> </span>-M<span class="w"> </span>no-aliases<span class="w"> </span>-d<span class="w"> </span>hello
+</code></pre></div>
+</div>
+</div>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>hello:  file format elf64-littleriscv
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Disassembly of section .text:
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>0000000000000000 &lt;_start&gt;:
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>       0: 13 05 00 00   addi    a0, zero, 0
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>       4: 93 05 80 04   addi    a1, zero, 72
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>       8: 73 00 10 00   ebreak
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>       c: 13 05 00 00   addi    a0, zero, 0
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>      10: 93 05 50 06   addi    a1, zero, 101
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      14: 73 00 10 00   ebreak
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>      18: 13 05 00 00   addi    a0, zero, 0
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>      1c: 93 05 c0 06   addi    a1, zero, 108
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>      20: 73 00 10 00   ebreak
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>      24: 13 05 00 00   addi    a0, zero, 0
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>      28: 93 05 c0 06   addi    a1, zero, 108
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>      2c: 73 00 10 00   ebreak
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>      30: 13 05 00 00   addi    a0, zero, 0
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>      34: 93 05 f0 06   addi    a1, zero, 111
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>      38: 73 00 10 00   ebreak
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>      3c: 13 05 10 00   addi    a0, zero, 1
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>      40: 93 05 00 00   addi    a1, zero, 0
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>      44: 73 00 10 00   ebreak
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>      48: 6f 00 00 00   jal     zero, 0x48 &lt;_start+0x48&gt;
+</code></pre></div>
+<p>好了，现在我们希望把这段代码能够运行起来，应该怎么做呢？我们要为它的运行提供一个环境，实现这个环境，本质上也就是使用C语言实现一个指令集状态机。</p>
+<h4 id="c_1">使用C语言变量模拟寄存器与内存</h4>
+<p>要做到这一点还是相对容易的。<code>&lt;stdint.h&gt;</code>为我们定义了一系列数据类型，能够帮助我们在不同的机器上使用相同字节大小的变量。下面的代码展现了如何模拟一个RISC-V存储器系统，其中包含了32个64位的寄存器、一个程序计数器寄存器PC和一个64字节的内存，这个内存是按照字节进行寻址的。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kt">uint64_t</span><span class="w"> </span><span class="n">reg</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+</code></pre></div>
+<h4 id="c_2">使用C语言模拟指令的语义</h4>
+<p>在CPU中，在一个指令执行的周期内，一般会有若干个过程。首先是取指，即从PC所指示的内存地址中读取出要执行的指令；接下来是译码，也就是按照指令集手册解析要进行操作的操作数和操作类型；然后是执行阶段，按照译码阶段给出的操作类型对操作数进行操作；之后还有访问存储器（寄存器和内存）的步骤，从内存中读出数据，或将数据写回内存和寄存器。最后，更新PC的值，指向接下来要执行的指令。</p>
+<p>从初始状态出发，状态机不断地执行指令，我们也可以控制什么时候停止执行。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">bool</span><span class="w"> </span><span class="n">halt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">halt</span><span class="p">){</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">cycle</span><span class="p">();</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">}</span>
+</code></pre></div>
+<h4 id="_4">初始状态</h4>
+<p>在RISC-V手册Volume II中，提到了初始状态是什么样的，更具体的内容可以参阅手册第3.4节（注意：手册中的hart一词指的是hardware thread，即硬件线程）。这里我们关注下面这句话。</p>
+<blockquote>
+<p>The <code>pc</code> is set to an implementation-defined reset vector.</p>
+</blockquote>
+<p>复位时，PC的值被设置为什么，是通过我们的实现来决定的。也就是说，我们在实现这样一个状态机的时候，可以约定PC具体的值。</p>
+<h4 id="_5">一种简单实现的代码框架</h4>
+<p>下面的代码运作的流程基本上是从文件读入程序，然后执行。file_open()函数实现了对文件的读取；cycle()函数内包含了我们刚刚提到的取指、译码、执行、访存和写回等阶段。这是一个最为简单的实现，但是它真真切切能够运行我们刚刚编写的程序！</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="kt">uint64_t</span><span class="w"> </span><span class="n">reg</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="kt">uint64_t</span><span class="w"> </span><span class="n">pc</span><span class="p">;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="kt">uint8_t</span><span class="w"> </span><span class="n">mem</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="kt">void</span><span class="w"> </span><span class="nf">file_open</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">filename</span><span class="p">);</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="kt">void</span><span class="w"> </span><span class="nf">cycle</span><span class="p">();</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">argv</span><span class="p">[]){</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="n">file_open</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="n">pc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">    </span><span class="n">reg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">halt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">halt</span><span class="p">){</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="n">cycle</span><span class="p">();</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="p">}</span>
+</code></pre></div>
+<p>至于我们如何生成我们想运行的程序，可以借助llvm-objcopy来完成。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">反汇编命令</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>llvm-objcopy<span class="w"> </span>-j<span class="w"> </span>.text<span class="w"> </span>-O<span class="w"> </span>binary<span class="w"> </span>hello<span class="w"> </span>hello.bin
+</code></pre></div>
+</div>
+</div>
+</div>
+<h4 id="_6">控制程序的结束</h4>
+<p>C语言程序是如何结束的？在以往的实践中我们也没有思考过这个问题，毕竟只需要在写完主体代码后顺手加上一个return 0就可以了。当然，C99手册事无巨细地定义好了这些看似不重要实际是灵魂拷问的细节。</p>
+<p>在上一个小节引述的C99在5.1.2.1节关于freestanding运行环境中的内容，手册已经定义清楚了，程序结束运行也是通过我们具体的实现来决定的。例如，我们可以人为控制我们的状态机在向某个内存地址写入某个特定的值的时候结束运行。</p>
+<h3 id="_7">最简单的操作系统</h3>
+<p>对于初涉计算机系统的人来说，一个他们往往不曾想到的事情是，并不需要操作系统的支持，我们也能在裸机（bare metal）上运行C语言程序（事实是，我们刚刚就编写了一个不需要链接到标准库、可以在裸机上直接运行的C语言程序！）。那么我们不禁要问的是，在操作系统上运行程序时，操作系统提供了什么样的功能？如果失去了这些功能，我们的程序还想继续正常地运行，我们需要采取什么样的额外措施？</p>
+<p>上面的问题如果放到20世纪40年代，一个还没有操作系统的时代，一定是会被人们嘲笑的。一方面，“计算”本身还是相当昂贵的资源，许多用户都还等待着使用计算机为若干更为重要的工作服务，怎么会有人把宝贵的CPU时间浪费在一个不能计算的程序上呢？另一方面，操作系统好像也不能提供什么有用的功能，失去了操作系统，计算机管理员依然可以把纸带按照顺序送入机器，然后分时段为客户服务，客户的程序也能够正常运行。</p>
+<p>进入20世纪50年代，晶体管的出现提高了计算机的可靠性。计算机系统拥有着更小和更快的晶体管和更大的存储器（一位名叫王安的人发明了磁芯存储器），同时各种低速外设也被发明出来。在这样的情况下，I/O的速度开始逐渐落后于处理器的速度，也因此，中断机制被引入到了计算机系统中。</p>
+<p><img alt="" src="../image/image_alubuwrbg.png" /></p>
+<p>同时，高级语言诞生了。像上面这张图片所显示的那样（Fortran是一个古老的语言，但至今仍然有许多科学计算的应用在使用它），人们可以将卡片插入到计算机中，然后计算机就可以执行高级语言书写的程序。那么，有没有一种可能，我们能够将所有的卡片一次性插入到计算机中，然后让计算机来决定什么时候运行某一张卡片上的程序？</p>
+<p>终于，操作系统的概念开始形成。操作系统为任务之间的切换提供了支持，并且开始诞生出一些API，这些API为语言程序提供了通用的接口，例如数学库函数，便于让程序员更容易进行编程。</p>
+<p>时间来到1960年代，硬件开始飞速发展。集成电路诞生，整个计算机系体结构的发展开始朝着摩尔定律指向的光明前程不断努力，处理器的能力以惊人的速率增长；总线也出现了，内存变得更大，我们可以同时载入多个程序，而不需要在卡片见来回切换。与此同时，更多的高级语言和编译器被发明出来（COBOL (1960), APL (1962), BASIC (1965)）。自然地，操作系统将共享资源以API的形式管理起来，达到不同任务之间的相对隔离；一个进程在执行I/O时，可以将CPU让给另一个进程。</p>
+<p>进入1970年以后，得益于摩尔定律，个人电脑也开始走进人们的生活，大体上与我们今天能使用的计算机和计算机软件已经没有太大的差别。在这样的形势下，分时系统走向成熟和UNIX完善为现代操作系统勾画了蓝图。</p>
+<p>在今天，硬件空前发展，我们拥有了更复杂的处理器和内存。非对称多处理器和非对称内存访问的系统上，人们还发展了多种硬件机制；计算机拥有了空前丰富的外设和存储空间；同时，计算机系统在应用场景上也变得更加复杂，从超级计算机到IoT设备，每一个地方都能看见微处理器的身影。</p>
+<p>所以...操作系统，就是操作系统的历史。如果让我们采用现代的视角来审视这个问题，那么在操作系统之上的应用程序看来，操作系统就是一系列对象和API的集合；从硬件的视角来看，为了实现这些API，操作系统也仅仅只是一个C语言程序，计算机上电后，这个程序就开始运行；在启动了第一个用户程序之后，它就变为一个中断控制程序，一切需要它提供服务时，它都会被应用程序发出的中断所唤醒。</p>
+<p>和大多数学科所描绘的事物一样，抛开纷繁复杂的外壳，操作系统的本质就是这么简单。</p>
+<p>现在，我们要记住，操作系统也不过就只是一个运行在机器上的程序，我们最开始用汇编语言初始化好一些寄存器的值（它们往往是一些重要的寄存器，例如栈指针寄存器），然后调用我们的函数，在编译时不引入任何的标准库文件，我们的操作系统就能够正确地运行起来。</p>
+<p>我们在QEMU上可以实现我们刚刚描述的工作。QEMU是一个高性能的全系统模拟器，近年来甚至有开发者将其移植到了iOS平台，使得像搭载了M1芯片的iPad Pro也可以运行虚拟机系统。下面这段汇编代码就为我们的操作系统运行提供了最基本的环境。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>    .equ STACKSIZE, 1024
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    .global _start
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    .text
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>_start: # 上电后由bootloader跳转到0x80000000
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    # 建立栈
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    la sp, stacks + STACK_SIZE # 将栈设置为stacks的地址加上栈的大小 
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    j kernel_entry
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>stacks:
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    .skip STACK_SIZE* MAX_CPU_NUMBER # 用0来填充所有的栈上的空间
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    .end
+</code></pre></div>
+<p>然后另起一个C语言文件，我们就能以我们最熟悉的方式书写我们的操作系统内核代码了。当然，现在我们什么功能也没有实现，我们只是让处理器进入一个循环。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">kernel_entry</span><span class="p">(){</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){;}</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span>
+</code></pre></div>
+<h3 id="_8">软硬件的联系</h3>
+<p>程序是存放在计算机存储器中的文本（依照计算机的组成，更准确的说，是存放在存储器中的0-1串），指令集更显得抽象一些，呈现给我们的似乎只有一个指令集文档；而我们知道，数字电路是一个物理实体。这三个不同的抽象层次，是如何得以相互联系起来的？</p>
+<p>事实上，根据指令集手册的描述，我们就可以通过硬件描述语言设计数字电路，得到处理器的版图，然后交付给晶圆厂。晶圆厂依照我们的版图在某个特定的特征尺寸上蚀刻我们的版图，然后我们就能得到一块集成电路，这就是我们的处理器实体。对于程序员来说，编写高级语言代码，然后进行编译，就将代码转换为指令集状态机，然后这些指令就作为激励，控制处理器芯片的状态转移。于是三个抽象层次的状态机在指令集层次创造联系，这也是我们说为什么指令集是软硬件接口的原因。</p>
+<p>这一点我们在《计算机系统漫游》中会进一步详细地介绍。</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: 前言" rel="prev">
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                前言
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../04-ilp/" class="md-footer__link md-footer__link--next" aria-label="Next: 乱序执行的魔法：数据依赖与指令级并行" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                乱序执行的魔法：数据依赖与指令级并行
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      沙河小分队 蜀ICP备2021028983号-2
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+  
+    
+  
+
+
+
+
+  
+
+<h4>Cookie 使用说明</h4>
+<p>我们使用 Cookie 来识别您的重复访问和偏好，从而衡量我们文档的有效性以及用户是否找到他们正在搜索的内容。您对 Cookie 的接受将帮助我们改进文档。</p>
+<input class="md-toggle" type="checkbox" id="__settings" checked>
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.footer"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.fac441b0.min.js"></script>
+      
+        <script src="../javascripts/katex.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/contrib/auto-render.min.js"></script>
+      
+    
+  </body>
+</html>
